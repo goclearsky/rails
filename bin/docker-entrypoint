@@ -3,10 +3,11 @@
 usage() {
     echo "Usage: $0 [option]"
     echo "Options:"
-    echo "  server:   execute rails server"
-    echo "  bash:     execute /bin/bash"
-    echo "  kickboot: execute /usr/bin/kickstart-bootstrap"
-    echo "  kicktail: execute /usr/bin/kickstart-tailwind"
+    echo "  server:    execute rails server"
+    echo "  bash:      execute /bin/bash"
+    echo "  kickstart: execute /usr/bin/kickstart-nobias"
+    echo "  kickboot:  execute /usr/bin/kickstart-bootstrap"
+    echo "  kicktail:  execute /usr/bin/kickstart-tailwind"
 }
 
 run_server() {
@@ -19,6 +20,11 @@ run_server() {
 run_bash() {
     echo "Running bash"
     /bin/bash
+}
+
+run_kickstart() {
+    echo "Performing kickstart without bias"
+    /usr/bin/kickstart-nobias
 }
 
 run_kickboot() {
@@ -39,6 +45,9 @@ dispatcher() {
             ;;
         bash)
             run_bash
+            ;;
+        kickstart)
+            run_kickstart
             ;;
         kickboot)
             run_kickboot

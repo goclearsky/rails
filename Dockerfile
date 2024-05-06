@@ -5,7 +5,7 @@
 #
 # to generate a new application, select myapp as desired,
 #   mkdir myapp; cd myapp
-#   docker run -it --rm -v $PWD:/src --name rails-kick rails kick* (boot or tail)
+#   docker run -it --rm -v $PWD:/src --name rails-kick rails kick* (start, boot or tail)
 #
 # to run the rails server,
 #   docker run -it --rm -v $PWD:/src --name rails-serv -p 3000:3000 -e RAILS_DEVELOPMENT_HOSTS=mynode.mydomain.net rails server
@@ -59,15 +59,16 @@ RUN apt-get update \
  && apt-get autoremove \
  && npm install -g npx yarn
 
-# setup entrypoint dispatcher
+# setup entrypoint dispatcher - not all versions have patches
 COPY ./bin/docker-entrypoint /usr/bin/docker-entrypoint
+COPY ./bin/kickstart/kickstart-nobias /usr/bin/kickstart-nobias
+COPY ./bin/kickstart/patch* /usr/bin/kickstart/
 COPY ./bin/kickboot/kickstart-bootstrap /usr/bin/kickstart-bootstrap
 COPY ./bin/kickboot/patch* /usr/bin/kickboot/
 COPY ./bin/kicktail/kickstart-tailwind /usr/bin/kickstart-tailwind
 COPY ./bin/kicktail/patch* /usr/bin/kicktail/
 RUN chmod a+x /usr/bin/docker-entrypoint
-RUN chmod a+x /usr/bin/kickstart-bootstrap
-RUN chmod a+x /usr/bin/kickstart-tailwind
+RUN chmod a+x /usr/bin/kickstart-*
 
 USER ruby
 
@@ -75,5 +76,5 @@ USER ruby
 ENTRYPOINT ["/usr/bin/docker-entrypoint"]
 
 # command arg passed to entrypoint
-# server is default, but can also be kickboot, kicktail, bash
+# server is default, but can also be kickstart, kickboot, kicktail, or bash
 CMD ["server"]
