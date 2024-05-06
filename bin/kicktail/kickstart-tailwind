@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# Bundler and rails must be installed during project setup, otherwise the gems
+# will be in the container, not the project directory.
+
+# install and configure the rails bundler
+gem install bundler
+bundle config set --local path .bundle
+
+# install rails
+gem install rails
+
+
+rails new . \
+ && bundle add tailwindcss-rails \
+ && rails tailwindcss:install

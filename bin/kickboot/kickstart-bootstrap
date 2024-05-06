@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# See the following reference for setting up rails with bootstrap and esbuild.
+# An error will result from the rails javascript:install:esbuild step, but the
+# patches set the files as needed, and yarn build confirms it worked.
+# https://medium.com/@rwubakwanayoolivier/using-esbuild-and-bootstrap-in-a-rails-7-project-by-replacing-the-default-importmap-cfc1f54e83ce
+
+# Bundler and rails must be installed during project setup, otherwise the gems
+# will be in the container, not the project directory. 
+
+# install and configure the rails bundler
+gem install bundler
+bundle config set --local path .bundle
+
+# install rails
+gem install rails
+
+
+rails new . \
+ && yarn add @hotwired/stimulus @hotwired/turbo-rails \
+ && bundle add cssbundling-rails \
+ && ./bin/rails css:install:bootstrap \
+ && bundle add jsbundling-rails \
+ && ./bin/rails javascript:install:esbuild \
+ && patch /src/app/javascript/application.js /usr/bin/kickboot/patch.a.j.application.js \
+ && patch /src/app/javascript/controllers/index.js /usr/bin/kickboot/patch.a.j.c.index.js \
+ && patch /src/app/views/layouts/application.html.erb /usr/bin/kickboot/patch.a.v.l.application.html.erb \
+ && patch /src/app/assets/config/manifest.js /usr/bin/kickboot/patch.a.a.c.manifest.js \
+ && yarn build

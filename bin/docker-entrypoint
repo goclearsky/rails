@@ -1,0 +1,64 @@
+#!/bin/bash
+
+usage() {
+    echo "Usage: $0 [option]"
+    echo "Options:"
+    echo "  server:   execute rails server"
+    echo "  bash:     execute /bin/bash"
+    echo "  kickboot: execute /usr/bin/kickstart-bootstrap"
+    echo "  kicktail: execute /usr/bin/kickstart-tailwind"
+}
+
+run_server() {
+    echo "Running server"
+    bundle check || bundle install
+    rm -f tmp/pids/server.pid
+    rails server -b 0.0.0.0
+}
+
+run_bash() {
+    echo "Running bash"
+    /bin/bash
+}
+
+run_kickboot() {
+    echo "Performing kickboot"
+    /usr/bin/kickstart-bootstrap
+}
+
+run_kicktail() {
+    echo "Performing kicktail"
+    /usr/bin/kickstart-tailwind
+}
+
+# Main dispatcher function
+dispatcher() {
+    case "$1" in
+        server)
+            run_server
+            ;;
+        bash)
+            run_bash
+            ;;
+        kickboot)
+            run_kickboot
+            ;;
+        kicktail)
+            run_kicktail
+            ;;
+        *)
+            usage
+            exit 1
+            ;;
+    esac
+}
+
+# Check if an argument is provided
+if [ $# -ne 1 ]; then
+    usage
+    exit 1
+fi
+
+# Dispatch based on the provided argument
+dispatcher "$1"
+
