@@ -1,38 +1,4 @@
 # Ruby on Rails image
-#
-# to build the image
-#   docker build -t rails .
-#
-# to generate a new application, select myapp as desired,
-#   mkdir myapp; cd myapp
-#   docker run -it --rm -v $PWD:/src --name rails-kick rails kick* (start, boot or tail)
-#
-# to run the rails server,
-#   docker run -it --rm -v $PWD:/src --name rails-serv -p 3000:3000 -e RAILS_DEVELOPMENT_HOSTS=mynode.mydomain.net rails server
-#
-# to run in docker compose with default CMD (server)
-#   rails-myapp:                     <-- name of service
-#     container_name: rails-myapp    <-- name of container
-#     image: rails                   <-- name of image built above
-#     ports:
-#       - "3000:3000"                <-- dev ports
-#     volumes:
-#       - /full/path/to/myapp:/src   <-- path to application dir
-#     environment:
-#       RAILS_DEVELOPMENT_HOSTS: mynode.mydomain.net
-#
-#   Name of service is used if you need to connect w/ other containers.
-#   Name of container is used below to gain shell access to the container.
-#   Keeping them the same is not required, just simpler.
-#   Run a separate container for a different app,
-#     change name of service, container, ext port, and path in volume.
-# 
-# to start the container using compose configuration above
-#   docker-compose up -d rails-myapp
-#
-# to get a shell in the running container
-#   docker exec -it rails-myapp /bin/bash
-#
 FROM ruby
 MAINTAINER miketallroth
 
